@@ -9,18 +9,36 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+GET = (function () {
+    var get = {
+        push:function (key,value){
+            var cur = this[key];
+            if (cur.isArray){
+                this[key].push(value);
+            }else {
+                this[key] = [];
+                this[key].push(cur);
+                this[key].push(value);
+            }
+        }
+    },
+    search = document.location.search,
+    decode = function (s,boo) {
+        var a = decodeURIComponent(s.split("+").join(" "));
+        return boo? a.replace(/\s+/g,''):a;
+    };
+    search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function (a,b,c) {
+        if (get[decode(b,true)]){
+            get.push(decode(b,true),decode(c));
+        }else {
+            get[decode(b,true)] = decode(c);
+        }
+    });
+    return get;
+})();
 
 
-document.getElementById('lab').value = getParameterByName('dname');
+document.getElementById('lab').innerHTML = "Hi, " + GET['dname'];
 
 // Initialize Firebase
 

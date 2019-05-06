@@ -30,7 +30,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
-    window.location = "logged.html?dname=" + email;
+    window.location = "logged.html?dname=" + email + "&uid="+uid;
   } else {
   }
 

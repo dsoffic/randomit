@@ -9,6 +9,17 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+function httpGet(theUrl, func)
+{
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", theUrl, true);
+  xhr.onload = func
+  xhr.onerror = function (e) {
+    console.error(xhr.statusText);
+  };
+  xhr.send(null);
+}
+
 GET = (function () {
     var get = {
         push:function (key,value){
@@ -38,12 +49,38 @@ GET = (function () {
 })();
 
 
-document.getElementById('lab').innerHTML = "Hi, " + GET['dname'];
-
 // Initialize Firebase
 
 
 function logOut() {
   firebase.auth().signOut();
       window.location.pathname = "index.html";
+}
+
+function generate() {
+  var min = 1;
+  var max = 100000;
+  var rid = Math.floor(Math.random() * (+max - +min)) + +min;
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://93.179.68.40:8080/?uid="+GET['uid']+"&rid="+rid, true);
+  xhr.onload = function (e) {
+  if (xhr.readyState === 4) {
+    if (xhr.status === 200) {
+      if (xhr.responseText == 'banned') {
+        alert("Error: you have banned!")
+        logOut();
+      } else {
+        document.getElementById('lab').innerHTML = xhr.responseText;
+      }
+    } else {
+      alert(xhr.statusText);
+    }
+  }
+};
+  xhr.onerror = function (e) {
+    console.error(xhr.statusText);
+    alert("Error. You can see text in console.")
+  };
+  xhr.send(null);
+
 }

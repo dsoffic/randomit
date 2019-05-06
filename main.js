@@ -6,8 +6,10 @@ let win;
 
 function createWindow() {
 	win = new BrowserWindow({
-		width: 640,
-		height: 360,
+		width: 950,
+		height: 500,
+		resizable: false,
+		autoHideMenuBar: true,
 		// icon: __dirname + "/img/icon.png"
 	});
 

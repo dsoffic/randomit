@@ -1,3 +1,4 @@
+const remote = require('electron').remote;
 var firebaseConfig = {
   apiKey: "AIzaSyBitV9S9AtsbhTYPmmeK0UZUt1cosGQW8s",
   authDomain: "randomit.firebaseapp.com",
@@ -9,24 +10,44 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-function httpGet(theUrl, func)
-{
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", theUrl, true);
-  xhr.onload = func
-  xhr.onerror = function (e) {
-    console.error(xhr.statusText);
-  };
-  xhr.send(null);
+var winNumber;
+
+function sleep(ms) {
+ms += new Date().getTime();
+while (new Date() < ms){}
 }
 
+setInterval(function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://93.179.68.40:8080/getWinNumber", true);
+    xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        if (xhr.responseText == 'banned') {
+          alert("Error: you have banned!");
+          logOut();
+        } else {
+          winNumber = xhr.responseText;
+          document.getElementById('winN').innerHTML = "Current win number: "+winNumber ;
+        }
+      } else {
+        alert(xhr.statusText);
+      }
+    }
+    };
+    xhr.onerror = function (e) {
+      console.error(xhr.statusText);
+      alert("Error. You can see text in console.");
+    };
+    xhr.send(null);
+}, 5000);
 GET = (function () {
     var get = {
         push:function (key,value){
             var cur = this[key];
             if (cur.isArray){
                 this[key].push(value);
-            }else {
+            } else {
                 this[key] = [];
                 this[key].push(cur);
                 this[key].push(value);
@@ -54,7 +75,8 @@ GET = (function () {
 
 function logOut() {
   firebase.auth().signOut();
-      window.location.pathname = "index.html";
+  var window = remote.getCurrentWindow();
+  window.close();
 }
 
 function generate() {
@@ -67,9 +89,12 @@ function generate() {
   if (xhr.readyState === 4) {
     if (xhr.status === 200) {
       if (xhr.responseText == 'banned') {
-        alert("Error: you have banned!")
+        alert("Error: you have banned!");
         logOut();
       } else {
+        if (xhr.responseText == winNumber){
+          alert("Wow, you win!!!")
+        }
         document.getElementById('lab').innerHTML = xhr.responseText;
       }
     } else {
@@ -79,7 +104,7 @@ function generate() {
 };
   xhr.onerror = function (e) {
     console.error(xhr.statusText);
-    alert("Error. You can see text in console.")
+    alert("Error. You can see text in console.");
   };
   xhr.send(null);
 

@@ -10,6 +10,9 @@ function createWindow() {
 		height: 500,
 		resizable: false,
 		autoHideMenuBar: true,
+		webPreferences: {
+        nodeIntegration: true
+    },
 		// icon: __dirname + "/img/icon.png"
 	});
 

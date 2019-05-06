@@ -1,3 +1,6 @@
+const remote = require('electron').remote;
+const path = require('path');
+const url = require('url');
 var firebaseConfig = {
   apiKey: "AIzaSyBitV9S9AtsbhTYPmmeK0UZUt1cosGQW8s",
   authDomain: "randomit.firebaseapp.com",
@@ -30,7 +33,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var providerData = user.providerData;
-    window.location = "logged.html?dname=" + email + "&uid="+uid;
+    // alert("file://" + path.join(__dirname, "logged.html")+"?dname=" + email + "&uid="+uid)
+    remote.getCurrentWindow().loadURL("file://" + path.join(__dirname, "logged.html")+"?dname=" + email + "&uid="+uid);
   } else {
   }
 

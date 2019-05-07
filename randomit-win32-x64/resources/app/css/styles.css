@@ -52,6 +52,54 @@ h3 {
    1px  1px 0   #000000;
 }
 
+@keyframes anim {
+  /* from {
+    background-color: white;
+    color: black;
+  }
+  0% {
+    background-color: red;
+    color: white;
+  }
+  25% {
+    background-color: blue;
+    color: green;
+  }
+  50% {
+    background-color: green;
+    color: black;
+  }
+  75% {
+    background-color: yellow;
+    color: blue;
+  }
+  100% {
+    background-color: red;
+    color: white;
+  } */
+  from {
+    margin-left: -50px;
+  }
+  /* 50% {
+    margin-left: -50px;
+  } */
+  to {
+    margin-left: 50px;
+  }
+}
+
+button {
+  font-weight: bold;
+}
+
+/* button:hover {
+  animation: anim 2s infinite alternate;
+  padding: 5px;
+  font-size: 18px;
+  margin-left: 10px;
+  background-color: #cccccc;
+} */
+
 h6 {
   color: white;
   text-shadow:
